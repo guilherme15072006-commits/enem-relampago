@@ -1,0 +1,597 @@
+[
+{
+"id": "2025-56",
+"assunto": "Geografia: clima e economia",
+"conteudo": "Mudanças no clima afetam rios, chuvas e temperaturas. Isso atinge setores da economia de formas diferentes, inclusive em países ricos.",
+"passos": [
+"Identifique o problema ambiental citado.",
+"Veja qual atividade econômica ele atinge.",
+"Procure o efeito direto, sem exagerar."
+],
+"resposta": "Sem navegação, as cargas precisam de alternativas, e o transporte fica mais caro.",
+"pegadinhas": {
+"A": "Mineração não é citada.",
+"B": "Pesca não é citada.",
+"D": "O texto fala de economias de países ricos e indústria, não de subsistência.",
+"E": "Sucateamento é exagero; o impacto é na logística."
+}
+},
+{
+"id": "2025-57",
+"assunto": "Geografia: lugar e memória",
+"conteudo": "Em Geografia, lugar é o espaço vivido, cheio de afetos e memórias. Histórias pessoais ajudam a entender essa relação.",
+"passos": [
+"Leia o que a feira representa para Virgínia.",
+"Note a ligação com a família e a Paraíba.",
+"Procure a opção com afeto e lugar."
+],
+"resposta": "A feira liga Virgínia ao pai e à Paraíba: histórias conectadas e lembranças do lugar.",
+"pegadinhas": {
+"B": "Dona Didi trabalha, mas não há direitos nem indústria.",
+"C": "Não há preconceito linguístico.",
+"D": "Costura em casa não é fábrica.",
+"E": "Não há segregação regional."
+}
+},
+{
+"id": "2025-58",
+"assunto": "História do Brasil: Império",
+"conteudo": "No Império, o voto tinha muitas restrições, como renda, sexo e condição social. Reformas eleitorais podem mudar quem participa da política.",
+"passos": [
+"Note a queda no número de votantes.",
+"Lembre o que mudou com a reforma de 1881.",
+"Pense em quem a regra excluiria."
+],
+"resposta": "A exigência de alfabetização excluiu a maioria da população do voto.",
+"pegadinhas": {
+"A": "Mulheres já não votavam antes.",
+"B": "Imigrantes não explicam a queda.",
+"C": "Domicílio não foi o fator central.",
+"E": "O voto não ficou obrigatório nessa mudança."
+}
+},
+{
+"id": "2025-59",
+"assunto": "Geografia: energia e ambiente",
+"conteudo": "A Amazônia manda umidade para outras regiões pelos “rios voadores”. Desmatar reduz chuvas e afeta hidrelétricas.",
+"passos": [
+"Veja qual tipo de energia caiu.",
+"Leia a explicação do professor.",
+"Identifique o que foi alterado."
+],
+"resposta": "O desmatamento altera a paisagem da Amazônia, região estratégica para a água.",
+"pegadinhas": {
+"A": "Não se trata de pesquisa do clima.",
+"C": "O problema é de oferta de água.",
+"D": "Acordos não são citados.",
+"E": "Geologia não muda; muda a floresta."
+}
+},
+{
+"id": "2025-60",
+"assunto": "Filosofia: ética e economia",
+"conteudo": "Adam Smith não pensava só em interesse próprio. Ele também escreveu sobre empatia e moral nas relações sociais.",
+"passos": [
+"Leia como Smith vê o padeiro.",
+"Procure as palavras ligadas a moral.",
+"Una lucro e dever."
+],
+"resposta": "As pessoas têm interesses, mas também motivação moral. O lucro se liga à responsabilidade ética.",
+"pegadinhas": {
+"A": "Poder político não é tema.",
+"B": "O texto vai além de satisfação pessoal.",
+"C": "Monopólio não é citado.",
+"E": "Reconhecimento público não aparece."
+}
+},
+{
+"id": "2025-61",
+"assunto": "Filosofia: Aristóteles e política",
+"conteudo": "Aristóteles classifica governos pelo número de governantes e pelo fim. Formas justas buscam o bem comum: um, poucos ou muitos.",
+"passos": [
+"Veja quem governa: Um, Minoria, Todos.",
+"Note que a pergunta pede formas justas.",
+"Associe cada número à forma correta."
+],
+"resposta": "Um governando bem é monarquia, poucos é aristocracia e muitos é democracia, nesta classificação clássica.",
+"pegadinhas": {
+"A": "Tirania e oligarquia são desvios.",
+"B": "Burocracia e império não entram.",
+"C": "Não são as três formas clássicas.",
+"D": "Esses termos não fazem parte da teoria."
+}
+},
+{
+"id": "2025-62",
+"assunto": "Sociologia: Bauman e utopia",
+"conteudo": "Utopia é a imagem de um mundo melhor. Em Bauman, ela surge da insatisfação com o presente e da confiança em mudá-lo.",
+"passos": [
+"Encontre as duas condições da utopia.",
+"Veja o papel do mundo atual nelas.",
+"Elimine o que olha para o passado."
+],
+"resposta": "A utopia mostra que o mundo pode mudar, apontando alternativas possíveis.",
+"pegadinhas": {
+"A": "Ela olha para o futuro, não memórias.",
+"C": "Ela critica o existente.",
+"D": "Ela questiona, não perpetua.",
+"E": "Ela indica caminhos, sem solução final."
+}
+},
+{
+"id": "2025-63",
+"assunto": "Geografia agrária",
+"conteudo": "O Brasil é líder em vários produtos agrícolas. Mudanças técnicas, políticas e econômicas ajudam a explicar esse desempenho.",
+"passos": [
+"Observe o tipo de produto na figura.",
+"Pense no que permite grande produção.",
+"Elimine o que diminui a produção."
+],
+"resposta": "A ampliação do capital agroindustrial no campo aumentou a produção e a exportação.",
+"pegadinhas": {
+"A": "O consumo interno não explica o cenário.",
+"C": "O agro usa trabalho especializado.",
+"D": "Moeda valorizada prejudica exportação.",
+"E": "Subsistência não produz para exportar."
+}
+},
+{
+"id": "2025-64",
+"assunto": "História do Brasil: Era Vargas",
+"conteudo": "Em 1954, o atentado da Rua Tonelero contra Carlos Lacerda aumentou a crise que levou ao suicídio de Vargas.",
+"passos": [
+"Identifique quem era o alvo.",
+"Pense no que a oposição faria depois.",
+"Procure a consequência imediata."
+],
+"resposta": "O atentado deu força à UDN, que aumentou os ataques ao governo.",
+"pegadinhas": {
+"B": "Sindicatos não entraram no conflito.",
+"C": "Essa mobilização veio com a morte de Vargas.",
+"D": "Não houve fim da censura aqui.",
+"E": "Não há relação com o Parlamento."
+}
+},
+{
+"id": "2025-65",
+"assunto": "Filosofia: ética",
+"conteudo": "Doutrinas éticas respondem como devemos viver: eudaimonia busca a vida plena; hedonismo, o prazer; altruísmo, o bem dos outros; pragmatismo, o que funciona.",
+"passos": [
+"Veja o que a autora gostaria de ser.",
+"Observe suas atitudes: defender e sofrer pelo outro.",
+"Compare com as doutrinas éticas das opções."
+],
+"resposta": "Ela quer lutar pelo bem dos outros e defendê-los. Isso é pensamento altruísta.",
+"pegadinhas": {
+"A": "Não fala de felicidade como fim.",
+"B": "Não busca prazer.",
+"D": "Animais são só um apelido da infância.",
+"E": "Pragmatismo foca utilidade."
+}
+},
+{
+"id": "2025-66",
+"assunto": "Filosofia: Escola de Frankfurt",
+"conteudo": "A Escola de Frankfurt critica a sociedade de consumo e a indústria cultural. Marcuse discute como o conforto material pode reduzir o questionamento do sistema.",
+"passos": [
+"Veja o que está perdendo a função crítica.",
+"Note que o sistema atende às necessidades.",
+"Procure o conceito do autor."
+],
+"resposta": "Sem oposição real ao sistema, a sociedade se torna unidimensional.",
+"pegadinhas": {
+"A": "Não é conceito de gestão.",
+"B": "Moral não é relativa aqui.",
+"C": "O texto diz que a oposição perde espaço.",
+"E": "Tecnologia não é o foco."
+}
+},
+{
+"id": "2025-67",
+"assunto": "Geografia agrária: terra e justiça",
+"conteudo": "A Constituição de 1988 prevê a função social da terra. A desapropriação é um instrumento para imóveis que descumprem essa regra.",
+"passos": [
+"Veja o motivo da desapropriação.",
+"Pense em quem tinha sido prejudicado.",
+"Procure a opção com justiça social."
+],
+"resposta": "Ao punir abusos contra trabalhadores, a medida revê desigualdades econômicas.",
+"pegadinhas": {
+"A": "Ela altera a ordem agrária.",
+"B": "Ela limita a propriedade.",
+"C": "Ela age contra classes dominantes.",
+"E": "Não torna a distribuição igual."
+}
+},
+{
+"id": "2025-68",
+"assunto": "Geografia urbana",
+"conteudo": "Fotos aéreas revelam como a cidade se organiza: altura das construções, usos do solo e ocupação da orla. Observe apenas o que a imagem realmente mostra.",
+"passos": [
+"Observe a foto com atenção.",
+"Identifique o elemento dominante.",
+"Escolha o que pode ser visto, sem inventar."
+],
+"resposta": "A foto mostra muitos prédios altos: verticalização urbana.",
+"pegadinhas": {
+"A": "Os prédios sugerem o oposto.",
+"B": "Há construções antigas, mas o destaque são prédios.",
+"C": "Não há moradias populares em destaque.",
+"D": "Foto não prova comércio."
+}
+},
+{
+"id": "2025-69",
+"assunto": "História medieval: Cruzadas",
+"conteudo": "Nas Cruzadas, a Igreja prometia salvação a quem partisse para lutar no Oriente. Leigos tinham uma nova via para a graça.",
+"passos": [
+"Encontre a condição para a salvação.",
+"Note o caráter da partida ao Oriente.",
+"Escolha a opção que nomeia a ação."
+],
+"resposta": "O fiel escolhia partir: salvação por ações voluntárias, sem abandonar seu estado.",
+"pegadinhas": {
+"A": "Escrita não é tema.",
+"B": "Não é rito de missa.",
+"D": "Não se fala em messianismo.",
+"E": "O ato é individual."
+}
+},
+{
+"id": "2025-70",
+"assunto": "Geografia física: solo",
+"conteudo": "O intemperismo transforma as rochas e pode ser físico, químico ou biológico. Alguns tipos de rocha reagem de forma particular à água.",
+"passos": [
+"Procure o tipo de rocha citado.",
+"Pense no que acontece com calcário e água.",
+"Associe ao processo."
+],
+"resposta": "O calcário no subsolo sofre intemperismo químico, e o solo desaba.",
+"pegadinhas": {
+"A": "Cristalização forma rocha, não buracos.",
+"C": "Mata ciliar não entra.",
+"D": "Sedimentos não explicam.",
+"E": "Impermeabilização não é citada."
+}
+},
+{
+"id": "2025-71",
+"assunto": "Geografia e história: memória",
+"conteudo": "Patrimônio histórico é o conjunto de bens que uma sociedade decide preservar. Construções antigas podem ter valor que vai além do material.",
+"passos": [
+"Veja o que o Muro representa.",
+"Note quem protestou e por quê.",
+"Associe à ideia de memória."
+],
+"resposta": "Demolir o símbolo histórico é violar a memória coletiva.",
+"pegadinhas": {
+"B": "O muro já não é fronteira.",
+"C": "Estilo não é tema.",
+"D": "Oriente não é o foco.",
+"E": "Trânsito não é o ponto."
+}
+},
+{
+"id": "2025-72",
+"assunto": "Filosofia: pré-socráticos",
+"conteudo": "Heráclito vê o mundo como fluxo e união de opostos. Dia e noite, guerra e paz formam uma unidade.",
+"passos": [
+"Note os pares nos fragmentos.",
+"Veja o que eles têm em comum.",
+"Procure a opção com pares de opostos."
+],
+"resposta": "O cosmos é pensado em pares contrários, ou seja, de forma dicotômica.",
+"pegadinhas": {
+"A": "Heráclito enfatiza mudança.",
+"B": "Não há degradação.",
+"C": "Imobilidade é Parmênides.",
+"E": "Os opostos têm ordem."
+}
+},
+{
+"id": "2025-73",
+"assunto": "História do Brasil: povos indígenas",
+"conteudo": "Para europeus, o canibalismo era barbárie. Entre os tupis, era ritual de guerra, com honra para quem morria.",
+"passos": [
+"Veja o sentido para os europeus.",
+"Veja o sentido para os guerreiros tupis.",
+"Respeite a ordem: “respectivamente”."
+],
+"resposta": "Europeus viam selvageria; os guerreiros viam honra, ou empoderamento.",
+"pegadinhas": {
+"B": "Impetuosidade não é a visão europeia.",
+"C": "Não há humilhação para os tupis.",
+"D": "Violência não é o significado tupi.",
+"E": "Repressão não é a visão europeia."
+}
+},
+{
+"id": "2025-74",
+"assunto": "Sociologia: religiões afro-brasileiras",
+"conteudo": "Religiões afro-brasileiras sofrem racismo religioso. Um texto sociológico pode apontar causas internas e externas para esse processo.",
+"passos": [
+"Liste as fraquezas internas dos cultos.",
+"Identifique o preconceito externo.",
+"Procure a opção com as duas coisas."
+],
+"resposta": "Falta organização ampla e existe preconceito: pouca coesão e recusa do outro.",
+"pegadinhas": {
+"A": "Partidos não aparecem.",
+"C": "Decisão não é o foco.",
+"D": "Direitos não são negados no texto.",
+"E": "Pertencimento étnico não aparece."
+}
+},
+{
+"id": "2025-75",
+"assunto": "Geografia: impactos da agricultura",
+"conteudo": "O uso de químicos na agricultura mudou a produção a partir do século XX. Esses produtos trazem ganhos, mas também têm efeitos sobre solo, água e seres vivos.",
+"passos": [
+"Identifique a mudança técnica.",
+"Pense nos efeitos dos inseticidas.",
+"Note que a pergunta pede algo que diminui."
+],
+"resposta": "Inseticidas reduzem a diversidade de polinizadores.",
+"pegadinhas": {
+"A": "Isso não diminui com químicos.",
+"C": "A contaminação aumenta.",
+"D": "A produtividade tende a subir.",
+"E": "Inseticida não reduz erosão."
+}
+},
+{
+"id": "2025-76",
+"assunto": "Filosofia: direitos humanos",
+"conteudo": "Para Bobbio, direitos humanos são históricos: nascem de lutas e mudam com o tempo e a sociedade.",
+"passos": [
+"Veja por que os direitos mudam.",
+"Note que eles dependem de condições históricas.",
+"Evite opções que os tratam como naturais."
+],
+"resposta": "Direitos mudam com interesses e condições: são convenções coletivas.",
+"pegadinhas": {
+"A": "Eles dependem de lutas.",
+"B": "O texto diz o oposto de atemporais.",
+"D": "Religião não é citada.",
+"E": "Não são apenas impostos."
+}
+},
+{
+"id": "2025-77",
+"assunto": "Geografia: sustentabilidade",
+"conteudo": "Carros elétricos reduzem fumaça, mas dependem de mineração de metais raros, que são finitos e causam impactos.",
+"passos": [
+"Note os dois lados da charge.",
+"Leia o que o texto diz sobre metais.",
+"Pense no que torna isso contraditório."
+],
+"resposta": "A tecnologia dita limpa depende de minerais finitos, ou seja, fontes não renováveis.",
+"pegadinhas": {
+"B": "Padronização não é citada.",
+"C": "Trabalho qualificado não é tema.",
+"D": "Legislação não aparece.",
+"E": "Reciclagem não é citada."
+}
+},
+{
+"id": "2025-78",
+"assunto": "História do Brasil: colônia",
+"conteudo": "No período colonial, a Igreja cuidava de assistência social. A Roda dos Expostos acolhia bebês abandonados.",
+"passos": [
+"Veja o objetivo da instituição.",
+"Note as palavras caridade e batismo.",
+"Una assistência e religião."
+],
+"resposta": "Caridade e salvação pelo batismo mostram um preceito sociorreligioso.",
+"pegadinhas": {
+"A": "Direitos humanos são ideia posterior.",
+"C": "Os bebês eram abandonados.",
+"D": "Não havia base técnica.",
+"E": "Não há relação com abolição."
+}
+},
+{
+"id": "2025-79",
+"assunto": "Filosofia: utilitarismo",
+"conteudo": "O utilitarismo de Bentham avalia ações por suas consequências, buscando a maior felicidade e menos dor.",
+"passos": [
+"Veja o que justifica punir.",
+"Identifique a finalidade do governo.",
+"Procure a opção com meios e fim."
+],
+"resposta": "A punição é meio para um fim: a felicidade da sociedade.",
+"pegadinhas": {
+"B": "Dever é ideia kantiana.",
+"C": "Não há base em princípios sobrepostos.",
+"D": "Não é sobre prescrições.",
+"E": "Não é sobre costume."
+}
+},
+{
+"id": "2025-80",
+"assunto": "Geografia urbana: sustentabilidade",
+"conteudo": "Cidade sustentável integra natureza, eficiência e igualdade. Obras que isolam rios costumam prejudicar o ambiente.",
+"passos": [
+"Atenção: a pergunta pede o que contradiz.",
+"Avalie cada opção como boa ou ruim ao ambiente.",
+"Escolha a que trata a natureza como objeto."
+],
+"resposta": "Canalizar rios altera o curso natural e contradiz essa cidade sustentável.",
+"pegadinhas": {
+"A": "É medida sustentável.",
+"B": "É medida sustentável.",
+"D": "Árvores são bem-vindas.",
+"E": "É medida sustentável."
+}
+},
+{
+"id": "2025-81",
+"assunto": "Sociologia: políticas públicas",
+"conteudo": "Discriminação positiva é uma ação específica para reduzir desigualdades de um grupo, como políticas para mulheres.",
+"passos": [
+"Entenda “discriminação positiva”.",
+"Procure ação dirigida às mulheres.",
+"Elimine opções que retiram direitos."
+],
+"resposta": "A delegacia especializada é uma política para proteger mulheres.",
+"pegadinhas": {
+"A": "Vale para todos.",
+"B": "Vale para trabalhadores em geral.",
+"C": "Extinguir o crime seria retrocesso.",
+"D": "Reduz um direito das mulheres."
+}
+},
+{
+"id": "2025-82",
+"assunto": "Filosofia: Platão",
+"conteudo": "Em A República, Platão defende que o governo cabe aos sábios. A política deve ser guiada pelo bem, não por interesses.",
+"passos": [
+"Veja quem deve governar.",
+"Note o que distingue a cidade justa.",
+"Procure a relação entre moral e governo."
+],
+"resposta": "Para Platão, governar exige buscar o bem comum: ética e poder andam juntos.",
+"pegadinhas": {
+"A": "Conhecimento sozinho não é o foco.",
+"B": "Mitos não são tema.",
+"C": "Platão critica a retórica.",
+"D": "Virtudes são citadas sem esse foco."
+}
+},
+{
+"id": "2025-83",
+"assunto": "História do Brasil: Corte portuguesa",
+"conteudo": "Com a chegada da Corte em 1808, o Rio virou sede do império. A imprensa ajudava a fortalecer e unir esse poder.",
+"passos": [
+"Note a data e a mudança da Corte.",
+"Veja o projeto citado no texto.",
+"Pense em como a tipografia ajudava."
+],
+"resposta": "A imprensa legitimava o projeto político e integrava territórios ao poder central.",
+"pegadinhas": {
+"A": "Não há normas ideológicas para periódicos.",
+"B": "Capitanias não são citadas.",
+"C": "Não trata de metrópoles europeias.",
+"E": "O foco é a América, não elites lusitanas."
+}
+},
+{
+"id": "2025-84",
+"assunto": "Geografia: ambiente e ciência",
+"conteudo": "Universidades ajudam a combater problemas ambientais com dados e modelos, como mapas de risco de incêndio.",
+"passos": [
+"Identifique quem criou a tecnologia.",
+"Veja qual o uso dela.",
+"Procure a opção ligada a essa origem."
+],
+"resposta": "A UFMG criou a ferramenta: mostra a importância da pesquisa acadêmica.",
+"pegadinhas": {
+"A": "Produção orgânica não é citada.",
+"B": "Estradas não são citadas.",
+"C": "Cosmologia não é citada.",
+"E": "Não há interesse estrangeiro."
+}
+},
+{
+"id": "2025-85",
+"assunto": "História cultural: cinema",
+"conteudo": "No começo do século XX, o cinema virou diversão de massa, com admiradores e críticos.",
+"passos": [
+"Identifique a posição do Texto I.",
+"Identifique a posição do Texto II.",
+"Compare as duas."
+],
+"resposta": "Um elogia e o outro critica o cinema. São argumentos contrários sobre a mesma diversão.",
+"pegadinhas": {
+"A": "As conclusões são opostas.",
+"C": "Não é sobre didática.",
+"D": "Não há teologia.",
+"E": "As justificativas diferem."
+}
+},
+{
+"id": "2025-86",
+"assunto": "Geografia: energia",
+"conteudo": "A matriz elétrica brasileira tem várias fontes, como água, vento e sol. Novas tecnologias podem mudar a demanda por cada uma delas.",
+"passos": [
+"Veja para que serve a energia do solo.",
+"Pense no que deixa de consumir.",
+"Lembre de onde vem a maior parte da eletricidade."
+],
+"resposta": "Climatizar sem tanta eletricidade reduz a pressão sobre as hidrelétricas.",
+"pegadinhas": {
+"A": "Fontes novas diversificam.",
+"B": "A tecnologia tende a reduzir o consumo.",
+"D": "Consumo industrial não é tema.",
+"E": "É um recurso renovável."
+}
+},
+{
+"id": "2025-87",
+"assunto": "História antiga: Roma",
+"conteudo": "A sociedade romana era dividida em grupos com direitos diferentes, como patrícios, plebeus e escravizados. Leis escritas mudaram o jogo político.",
+"passos": [
+"Veja quem controlava a justiça.",
+"Pense em quem era prejudicado.",
+"Lembre a luta social em Roma."
+],
+"resposta": "Os plebeus contestaram os patrícios, buscando participar da vida política.",
+"pegadinhas": {
+"A": "Monarcas não eram o grupo em questão.",
+"C": "Os nobres eram os beneficiados.",
+"D": "Jornada não é tema.",
+"E": "Estrangeiros não são o foco."
+}
+},
+{
+"id": "2025-88",
+"assunto": "Antropologia: povos indígenas",
+"conteudo": "Povos indígenas têm direito de manter e proteger seu patrimônio. Ele inclui línguas, técnicas, medicina, arte e formas de conhecimento.",
+"passos": [
+"Liste o que a declaração protege.",
+"Note a variedade dos itens.",
+"Procure a opção com todos os conhecimentos."
+],
+"resposta": "A longa lista mostra a complexidade dos saberes tradicionais.",
+"pegadinhas": {
+"A": "Línguas são só uma parte.",
+"B": "O texto protege o que é próprio.",
+"D": "Vai além da sobrevivência.",
+"E": "Não é só economia."
+}
+},
+{
+"id": "2025-89",
+"assunto": "História das religiões",
+"conteudo": "Textos sagrados também falam de conhecimento e técnica. Comparar textos exige achar o ponto comum.",
+"passos": [
+"Veja o que cada texto valoriza.",
+"Procure o ponto comum.",
+"Evite focar em uma religião só."
+],
+"resposta": "Os textos ligam ciência a habilidades e à vida social: desenvolvimento social e trabalho.",
+"pegadinhas": {
+"A": "Universidades não aparecem.",
+"B": "Não trata de seitas.",
+"C": "Não há intolerância.",
+"D": "Não é sobre rituais."
+}
+},
+{
+"id": "2025-90",
+"assunto": "História: expedições científicas",
+"conteudo": "Expedições científicas no século XX coletavam dados e objetos para museus, e podiam servir a interesses de poder.",
+"passos": [
+"Veja quem enviou a expedição e o que coletou.",
+"Note que a pergunta vai além da ciência.",
+"Pense no que um Império quer em outro continente."
+],
+"resposta": "Levar material para a Rússia e ter presença na América revela caráter imperialista e colonizador.",
+"pegadinhas": {
+"B": "Não há militares.",
+"C": "Não é lazer nem caridade.",
+"D": "O objetivo não era comércio.",
+"E": "Não há missão religiosa."
+}
+}
+]
