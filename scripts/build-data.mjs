@@ -35,11 +35,26 @@ function alternatives(text) {
   return Object.values(found).every(Boolean) ? found : null;
 }
 
+// Versão aprofundada: aula do assunto mais completa, resolução citando o texto da prova
+// e explicação da resposta. Sobrescreve os mesmos campos da versão curta.
+const Deep = z.object({
+  id: z.string(), conteudo: z.string().min(160), passos: z.array(z.string().min(15)).min(3).max(6),
+  resposta: z.string().min(60), pegadinhas: z.record(Letter, z.string().min(5)).optional(),
+});
+
 const raw = readJsonDir(join(root, 'data', 'raw')).map((q) => Raw.parse(q));
 const explanations = new Map(readJsonDir(join(root, 'data', 'explain')).map((e) => {
   const parsed = Explain.parse(e);
   return [parsed.id, parsed];
 }));
+let deepened = 0;
+for (const d of readJsonDir(join(root, 'data', 'explain-v2'))) {
+  const parsed = Deep.parse(d);
+  const base = explanations.get(parsed.id);
+  if (!base) throw new Error(`${parsed.id}: versão aprofundada sem explicação base`);
+  explanations.set(parsed.id, { ...base, ...parsed, pegadinhas: { ...base.pegadinhas, ...parsed.pegadinhas } });
+  deepened++;
+}
 
 const errors = [];
 const pending = [];
@@ -74,7 +89,7 @@ mkdirSync(join(root, 'src', 'data'), { recursive: true });
 writeFileSync(join(root, 'src', 'data', 'questions.json'), JSON.stringify(questions.filter((q) => q.explained)));
 writeFileSync(join(root, 'data', 'pendentes.json'), JSON.stringify(pending, null, 1));
 
-console.log(`${questions.length} questões | ${questions.length - pending.length} explicadas | ${pending.length} pendentes`);
+console.log(`${questions.length} questões | ${questions.length - pending.length} explicadas (${deepened} aprofundadas) | ${pending.length} pendentes`);
 if (errors.length) {
   console.error(errors.join('\n'));
   process.exit(1);
