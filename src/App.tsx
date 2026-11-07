@@ -25,7 +25,6 @@ const inTarget = (t: TrainTarget) => (q: Question) => q.explained && (!t.assunto
   && (t.from === undefined || q.number >= t.from) && (t.to === undefined || q.number <= t.to);
 
 const EXAM = new Date('2026-11-08T13:30:00-03:00');
-const TABS: [Tab, string][] = [['plano', 'Plano'], ['treino', 'Treino'], ['cartas', 'Cartas'], ['duvidas', 'Dúvidas']];
 const CONFIDENCE: [Confidence, string][] = [['sei', 'Sei'], ['duvida', 'Dúvida'], ['chute', 'Chute']];
 
 export function App() {
@@ -37,22 +36,18 @@ export function App() {
   return (
     <div className="app">
       <main>
-        {tab === 'plano' && <Plan progress={progress} update={update} train={train} />}
+        {tab !== 'plano' && <button className="back" onClick={() => setTab('plano')}>‹ Início</button>}
+        {tab === 'plano' && <Plan progress={progress} update={update} train={train} open={setTab} />}
         {tab === 'treino' && !target && <Picker progress={progress} choose={setTarget} />}
         {tab === 'treino' && target && <Train key={JSON.stringify(target)} target={target} progress={progress} update={update} clear={() => setTarget(null)} />}
         {tab === 'cartas' && <Cards progress={progress} update={update} train={train} />}
-        {tab === 'duvidas' && <section><p className="eyebrow">Dúvidas</p><h1>Pergunte à IA</h1><p className="muted">Tire dúvidas sobre qualquer assunto do ENEM.</p><AskAI context="" title="Abrir conversa" /></section>}
+        {tab === 'duvidas' && <section><p className="eyebrow">Dúvidas</p><h1>Pergunte à IA</h1><p className="muted">Tire dúvidas sobre qualquer assunto do ENEM.</p><AskAI context="" /></section>}
       </main>
-      <nav aria-label="Principal">
-        {TABS.map(([id, label]) => (
-          <button key={id} className={tab === id ? 'on' : ''} aria-current={tab === id ? 'page' : undefined} onClick={() => setTab(id)}>{label}</button>
-        ))}
-      </nav>
     </div>
   );
 }
 
-function Plan({ progress, update, train }: { progress: Progress; update: Update; train: (t?: TrainTarget | null) => void }) {
+function Plan({ progress, update, train, open }: { progress: Progress; update: Update; train: (t?: TrainTarget | null) => void; open: (tab: Tab) => void }) {
   const left = EXAM.getTime() - Date.now();
   const days = Math.floor(left / 86400000);
   const hours = Math.floor((left % 86400000) / 3600000);
@@ -67,7 +62,11 @@ function Plan({ progress, update, train }: { progress: Progress; update: Update;
       <p className="eyebrow">ENEM 2026 · 1º dia</p>
       <h1>{left > 0 ? `Faltam ${days}d ${hours}h` : 'Boa prova!'}</h1>
       <p className="muted">Domingo, 8 de novembro, às 13h30. Portões fecham às 13h.</p>
-      <button className="primary" onClick={() => train()}>Escolher parte da prova</button>
+      <button className="primary" onClick={() => train()}>Fazer questões</button>
+      <div className="pair">
+        <button className="ghost" onClick={() => open('cartas')}>Cartas de assunto</button>
+        <button className="ghost" onClick={() => open('duvidas')}>✦ Perguntar à IA</button>
+      </div>
 
       <dl className="stats">
         <div><dt>Feitas</dt><dd>{reviewed.length}</dd></div>
@@ -191,7 +190,7 @@ function Flow({ question: q, progress, update, next }: { question: Question; pro
             <p className="stage">Explicação antes da questão</p>
             <h1>{q.assunto}</h1>
             <p className="lead">{q.conteudo}</p>
-            <AskAI context={`Assunto: ${q.assunto}\nConteúdo: ${q.conteudo}\nO aluno ainda não respondeu. Não indique alternativa.`} />
+            <AskAI label="Explicar melhor com IA" prompt="Explique este conteúdo de forma simples, com um exemplo. Não indique nenhuma alternativa." context={`Assunto: ${q.assunto}\nConteúdo: ${q.conteudo}\nO aluno ainda não respondeu. Não indique alternativa.`} />
           </article>
         )}
         <h2>A questão</h2>
@@ -233,7 +232,7 @@ function Flow({ question: q, progress, update, next }: { question: Question; pro
           </ul>
         </>
       ) : <p className="note">Esta questão ainda não tem explicação. O gabarito acima é o oficial do Inep.</p>}
-      <AskAI context={`Questão ${q.number} do ENEM ${q.year}\nTexto da questão: ${q.text ?? ''}\nGabarito oficial: ${q.answer}\nO aluno marcou: ${saved?.choice}\nExplicação: ${q.resposta ?? ''}`} />
+      <AskAI label="Explicar a resposta com IA" prompt="Explique de forma simples por que o gabarito é essa alternativa e o que eu devo observar para acertar." context={`Questão ${q.number} do ENEM ${q.year}\nTexto da questão: ${q.text ?? ''}\nGabarito oficial: ${q.answer}\nO aluno marcou: ${saved?.choice}\nExplicação: ${q.resposta ?? ''}`} />
       <details><summary>Ver a questão de novo</summary>{q.context && <Zoomable src={q.context} alt="Texto compartilhado" />}<Zoomable src={q.image} alt={`Questão ${q.number}`} /></details>
       <button className="primary" onClick={() => next(!right)}>{right ? 'Próxima questão' : 'Outra do mesmo assunto'}</button>
       <button className="ghost" onClick={() => update((p) => ({ ...p, reported: reported ? p.reported.filter((id) => id !== q.id) : [...p.reported, q.id] }))}>{reported ? 'Erro reportado ✓' : 'Reportar erro nesta explicação'}</button>
