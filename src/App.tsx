@@ -7,7 +7,22 @@ import {
 
 type Tab = 'plano' | 'treino' | 'cartas' | 'duvidas';
 type Update = (fn: (p: Progress) => Progress) => void;
-interface TrainTarget { assunto?: string }
+interface TrainTarget { assunto?: string; from?: number; to?: number; label?: string }
+
+const PARTS: TrainTarget[] = [
+  { label: 'Prova inteira', from: 1, to: 90 },
+  { label: 'Língua estrangeira', from: 1, to: 5 },
+  { label: 'Linguagens', from: 6, to: 45 },
+  { label: 'Humanas', from: 46, to: 90 },
+  { label: 'Questões 1 a 15', from: 1, to: 15 },
+  { label: 'Questões 16 a 30', from: 16, to: 30 },
+  { label: 'Questões 31 a 45', from: 31, to: 45 },
+  { label: 'Questões 46 a 60', from: 46, to: 60 },
+  { label: 'Questões 61 a 75', from: 61, to: 75 },
+  { label: 'Questões 76 a 90', from: 76, to: 90 },
+];
+const inTarget = (t: TrainTarget) => (q: Question) => q.explained && (!t.assunto || q.assunto === t.assunto)
+  && (t.from === undefined || q.number >= t.from) && (t.to === undefined || q.number <= t.to);
 
 const EXAM = new Date('2026-11-08T13:30:00-03:00');
 const TABS: [Tab, string][] = [['plano', 'Plano'], ['treino', 'Treino'], ['cartas', 'Cartas'], ['duvidas', 'Dúvidas']];
@@ -16,14 +31,15 @@ const CONFIDENCE: [Confidence, string][] = [['sei', 'Sei'], ['duvida', 'Dúvida'
 export function App() {
   const [progress, update] = useProgress();
   const [tab, setTab] = useState<Tab>('plano');
-  const [target, setTarget] = useState<TrainTarget>({});
-  const train = (t: TrainTarget = {}) => { setTarget(t); setTab('treino'); };
+  const [target, setTarget] = useState<TrainTarget | null>(null);
+  const train = (t: TrainTarget | null = null) => { setTarget(t); setTab('treino'); };
 
   return (
     <div className="app">
       <main>
         {tab === 'plano' && <Plan progress={progress} update={update} train={train} />}
-        {tab === 'treino' && <Train key={JSON.stringify(target)} target={target} progress={progress} update={update} clear={() => setTarget({})} />}
+        {tab === 'treino' && !target && <Picker progress={progress} choose={setTarget} />}
+        {tab === 'treino' && target && <Train key={JSON.stringify(target)} target={target} progress={progress} update={update} clear={() => setTarget(null)} />}
         {tab === 'cartas' && <Cards progress={progress} update={update} train={train} />}
         {tab === 'duvidas' && <section><p className="eyebrow">Dúvidas</p><h1>Pergunte à IA</h1><p className="muted">Tire dúvidas sobre qualquer assunto do ENEM.</p><AskAI context="" title="Abrir conversa" /></section>}
       </main>
@@ -36,7 +52,7 @@ export function App() {
   );
 }
 
-function Plan({ progress, update, train }: { progress: Progress; update: Update; train: (t?: TrainTarget) => void }) {
+function Plan({ progress, update, train }: { progress: Progress; update: Update; train: (t?: TrainTarget | null) => void }) {
   const left = EXAM.getTime() - Date.now();
   const days = Math.floor(left / 86400000);
   const hours = Math.floor((left % 86400000) / 3600000);
@@ -51,7 +67,7 @@ function Plan({ progress, update, train }: { progress: Progress; update: Update;
       <p className="eyebrow">ENEM 2026 · 1º dia</p>
       <h1>{left > 0 ? `Faltam ${days}d ${hours}h` : 'Boa prova!'}</h1>
       <p className="muted">Domingo, 8 de novembro, às 13h30. Portões fecham às 13h.</p>
-      <button className="primary" onClick={() => train()}>Treinar agora</button>
+      <button className="primary" onClick={() => train()}>Escolher parte da prova</button>
 
       <dl className="stats">
         <div><dt>Feitas</dt><dd>{reviewed.length}</dd></div>
@@ -77,26 +93,73 @@ function Plan({ progress, update, train }: { progress: Progress; update: Update;
   );
 }
 
+function Picker({ progress, choose }: { progress: Progress; choose: (t: TrainTarget) => void }) {
+  const [from, setFrom] = useState('1');
+  const [to, setTo] = useState('90');
+  const visible = QUESTIONS.filter(visibleFor(progress.lang));
+  const count = (t: TrainTarget) => {
+    const list = visible.filter(inTarget(t));
+    return `${list.filter((q) => progress.answers[q.id]?.reviewed).length} de ${list.length}`;
+  };
+  const start = Math.min(90, Math.max(1, Number(from) || 1));
+  const end = Math.min(90, Math.max(start, Number(to) || start));
+
+  return (
+    <section>
+      <p className="eyebrow">Treino · ENEM 2025 · 1º dia</p>
+      <h1>Qual parte você quer fazer?</h1>
+      <ul className="list">
+        {PARTS.map((part) => (
+          <li key={part.label}><button onClick={() => choose(part)}><span>{part.label}</span><small>{count(part)}</small></button></li>
+        ))}
+      </ul>
+      <h2>Escolher as questões</h2>
+      <div className="range">
+        <label>De<input inputMode="numeric" value={from} onChange={(e) => setFrom(e.target.value)} /></label>
+        <label>Até<input inputMode="numeric" value={to} onChange={(e) => setTo(e.target.value)} /></label>
+        <button className="primary" onClick={() => choose({ from: start, to: end, label: `Questões ${start} a ${end}` })}>Começar</button>
+      </div>
+      <h2>Por assunto</h2>
+      <ul className="list">
+        {topics().map(({ assunto }) => (
+          <li key={assunto}><button onClick={() => choose({ assunto })}><span>{assunto}</span><small>{count({ assunto })}</small></button></li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 function Train({ target, progress, update, clear }: { target: TrainTarget; progress: Progress; update: Update; clear: () => void }) {
-  const pool = useMemo(() => QUESTIONS.filter(visibleFor(progress.lang)).filter((q) => q.explained && (!target.assunto || q.assunto === target.assunto)), [progress.lang, target.assunto]);
+  const pool = useMemo(() => QUESTIONS.filter(visibleFor(progress.lang)).filter(inTarget(target)), [progress.lang, target]);
   const pick = (assunto?: string, skip?: string) => {
     const open = pool.filter((q) => !progress.answers[q.id]?.reviewed && q.id !== skip);
     return open.find((q) => q.assunto === assunto) ?? open[0] ?? null;
   };
   const [question, setQuestion] = useState<Question | null>(() => pick());
+  const label = target.label ?? target.assunto ?? 'Treino';
+  const done = pool.filter((q) => progress.answers[q.id]?.reviewed).length;
+  const restart = () => {
+    update((p) => {
+      const answers = { ...p.answers };
+      for (const q of pool) delete answers[q.id];
+      return { ...p, answers };
+    });
+    setQuestion(pool[0] ?? null);
+  };
 
   if (!question) {
     return (
       <section className="empty">
-        <h1>Tudo feito aqui</h1>
-        <p className="muted">Você terminou as questões {target.assunto ? `de ${target.assunto}` : 'explicadas'}. Volte ao Plano para escolher o próximo assunto.</p>
-        {target.assunto && <button className="primary" onClick={clear}>Treinar todos os assuntos</button>}
+        <h1>Parte concluída</h1>
+        <p className="muted">Você fez {done} de {pool.length} questões em {label}.</p>
+        <button className="primary" onClick={clear}>Escolher outra parte</button>
+        {pool.length > 0 && <button className="ghost" onClick={restart}>Refazer esta parte</button>}
       </section>
     );
   }
   return (
     <>
-      {target.assunto && <button className="chip" onClick={clear}>{target.assunto} ✕</button>}
+      <button className="chip" onClick={clear}>{label} · {done} de {pool.length} · Trocar parte</button>
       <Flow
         key={question.id} question={question} progress={progress} update={update}
         next={(wrong) => { window.scrollTo(0, 0); setQuestion(pick(wrong ? question.assunto : undefined, question.id)); }}
@@ -107,7 +170,7 @@ function Train({ target, progress, update, clear }: { target: TrainTarget; progr
 
 function Flow({ question: q, progress, update, next }: { question: Question; progress: Progress; update: Update; next: (wrong: boolean) => void }) {
   const saved = progress.answers[q.id];
-  const [step, setStep] = useState<'conteudo' | 'questao' | 'resultado'>(saved?.reviewed ? 'resultado' : q.explained ? 'conteudo' : 'questao');
+  const [step, setStep] = useState<'questao' | 'resultado'>(saved?.reviewed ? 'resultado' : 'questao');
   const [confidence, setConfidence] = useState<Confidence | undefined>(saved?.confidence);
   useEffect(() => { window.scrollTo(0, 0); }, [step]);
 
@@ -119,24 +182,19 @@ function Flow({ question: q, progress, update, next }: { question: Question; pro
     setStep('resultado');
   };
 
-  if (step === 'conteudo') {
-    return (
-      <section>
-        <p className="eyebrow">{label}</p>
-        <p className="stage">1 de 3 · Conteúdo</p>
-        <h1>{q.assunto}</h1>
-        <p className="lead">{q.conteudo}</p>
-        <button className="primary" onClick={() => setStep('questao')}>Ir para a questão</button>
-        <AskAI context={`Assunto: ${q.assunto}\nConteúdo: ${q.conteudo}\nO aluno ainda não respondeu. Não indique alternativa.`} />
-      </section>
-    );
-  }
-
   if (step === 'questao') {
     return (
       <section>
         <p className="eyebrow">{label}</p>
-        <p className="stage">2 de 3 · Questão</p>
+        {q.explained && (
+          <article className="lesson">
+            <p className="stage">Explicação antes da questão</p>
+            <h1>{q.assunto}</h1>
+            <p className="lead">{q.conteudo}</p>
+            <AskAI context={`Assunto: ${q.assunto}\nConteúdo: ${q.conteudo}\nO aluno ainda não respondeu. Não indique alternativa.`} />
+          </article>
+        )}
+        <h2>A questão</h2>
         {q.context && <Zoomable src={q.context} alt="Texto compartilhado da questão" />}
         <Zoomable src={q.image} alt={`Questão ${q.number} da prova`} />
         <p className="muted small">Opcional: marque antes se você sabe ou vai chutar.</p>
@@ -156,7 +214,7 @@ function Flow({ question: q, progress, update, next }: { question: Question; pro
   return (
     <section>
       <p className="eyebrow">{label}</p>
-      <p className="stage">3 de 3 · Como resolver</p>
+      <p className="stage">Como resolver</p>
       <h1 className={right ? 'good' : 'bad'}>{right ? 'Acertou' : 'Errou'}: resposta {q.answer}</h1>
       {q.alternativas && <p className="official"><b>{q.answer}</b> {q.alternativas[q.answer]}</p>}
       {saved && !right && q.alternativas && <p className="muted small">Você marcou {saved.choice}: {q.alternativas[saved.choice]}</p>}
@@ -193,7 +251,7 @@ function Zoomable({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-function Cards({ progress, update, train }: { progress: Progress; update: Update; train: (t?: TrainTarget) => void }) {
+function Cards({ progress, update, train }: { progress: Progress; update: Update; train: (t?: TrainTarget | null) => void }) {
   const all = useMemo(topics, []);
   const pending = all.filter((t) => !progress.cards[t.assunto]);
   const card = pending[0];

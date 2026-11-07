@@ -92,3 +92,12 @@ nav button { min-width: 0; }
 .official { background: var(--raised); border-radius: var(--radius); padding: 12px 14px; }
 .official b { color: var(--good); margin-right: 6px; }
 .traps em { display: block; font-style: normal; font-weight: 600; margin-bottom: 2px; }
+
+.lesson { background: var(--surface); border-left: 4px solid var(--accent); border-radius: var(--radius); padding: 16px; }
+.lesson > * + * { margin-top: 10px; }
+.lesson .ai { background: var(--raised); }
+.list small { color: var(--muted); white-space: nowrap; }
+.range { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.range label { color: var(--muted); font-size: .9rem; }
+.range input { display: block; width: 100%; min-height: 48px; margin-top: 4px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font: inherit; }
+.range .primary { grid-column: 1 / -1; }
