@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "data": "node scripts/build-data.mjs",
+    "data": "node scripts/build-data.mjs && node scripts/check-explicacoes.mjs",
     "importar": "node scripts/importar.mjs",
     "dev": "npm run data && vite",
     "build": "npm run data && tsc --noEmit && vite build",
