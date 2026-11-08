@@ -13,6 +13,44 @@ Se não tiver certeza de um fato, diga isso claramente.`;
 
 interface Message { role: 'user' | 'assistant'; content: string }
 
+// Servidor com o token do dono guardado em segredo. Sem ele no ar, o app usa o token salvo no aparelho.
+const SERVER = 'https://ymuziccgrqjbugsdwgjo.supabase.co/functions/v1/enem_ai';
+const CLIENT_KEY = 'enem-relampago.client-id';
+class ServerUnavailable extends Error {}
+
+function clientId() {
+  try {
+    let id = localStorage.getItem(CLIENT_KEY);
+    if (!id) { id = crypto.randomUUID(); localStorage.setItem(CLIENT_KEY, id); }
+    return id;
+  } catch {
+    return 'sem-armazenamento';
+  }
+}
+
+async function askServer(context: string, history: Message[]) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 75000);
+  let response: Response;
+  try {
+    response = await fetch(SERVER, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: { 'Content-Type': 'application/json', 'x-client-id': clientId() },
+      body: JSON.stringify({ context: context.slice(0, 8000), messages: history.slice(-6).map((m) => ({ role: m.role, content: m.content.slice(0, 2000) })) }),
+    });
+  } catch {
+    throw new ServerUnavailable();
+  } finally {
+    clearTimeout(timer);
+  }
+  const data = await response.json().catch(() => ({}));
+  if (response.ok && data.text) return { text: data.text as string, reserve: false };
+  // Função não publicada ou sem token configurado: cai para o token do aparelho.
+  if (response.status === 404 || response.status === 503 || (response.status >= 500 && !data.error)) throw new ServerUnavailable();
+  throw new Error(data.error || `A IA não respondeu (erro ${response.status}). Tente de novo.`);
+}
+
 const readTokens = () => TOKEN_KEYS.map((key) => {
   try { return localStorage.getItem(key) ?? ''; } catch { return ''; }
 });
@@ -92,13 +130,27 @@ export function AskAI({ context, prompt, label = 'Explicar com IA' }: AskProps) 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
 
+  const [needToken, setNeedToken] = useState(false);
+
   const run = async (text: string, keys = tokens) => {
     const history: Message[] = [...messages, { role: 'user', content: text }];
     setMessages(history);
     setError('');
     setBusy(true);
     try {
-      const answer = await ask(keys, context, history);
+      let answer;
+      try {
+        answer = await askServer(context, history);
+      } catch (e) {
+        if (!(e instanceof ServerUnavailable)) throw e;
+        if (!keys.length) {
+          // Sem servidor e sem token no aparelho: pede o token e refaz a mesma pergunta depois.
+          setMessages(messages);
+          setNeedToken(true);
+          return;
+        }
+        answer = await ask(keys, context, history);
+      }
       setReserve(answer.reserve);
       setMessages([...history, { role: 'assistant', content: answer.text }]);
     } catch (e) {
@@ -111,7 +163,7 @@ export function AskAI({ context, prompt, label = 'Explicar com IA' }: AskProps) 
 
   const start = () => {
     setOpen(true);
-    if (prompt && tokens.length && !messages.length && !busy) run(prompt);
+    if (prompt && !messages.length && !busy) run(prompt);
   };
   const saveToken = (event: FormEvent) => {
     event.preventDefault();
@@ -120,7 +172,8 @@ export function AskAI({ context, prompt, label = 'Explicar com IA' }: AskProps) 
     writeTokens(values);
     setSaved(values);
     setDrafts(['', '']);
-    // Salvou o primeiro token: já busca a explicação que foi pedida.
+    setNeedToken(false);
+    // Salvou o token: já busca a explicação que foi pedida.
     if (prompt && !messages.length) run(prompt, values.filter(Boolean));
   };
   const forget = () => { writeTokens(['', '']); setSaved(['', '']); setMessages([]); setError(''); setReserve(false); };
@@ -136,7 +189,7 @@ export function AskAI({ context, prompt, label = 'Explicar com IA' }: AskProps) 
 
   return (
     <div className="ai">
-      {tokens.length === 0 ? (
+      {needToken && tokens.length === 0 ? (
         <form onSubmit={saveToken}>
           <p className="muted small">Para a IA responder, crie um token no Hugging Face com a permissão “Make calls to Inference Providers” e cole aqui. É só uma vez: ele fica salvo neste aparelho.</p>
           <a href="https://huggingface.co/settings/tokens" target="_blank" rel="noreferrer">Abrir página de tokens</a>
