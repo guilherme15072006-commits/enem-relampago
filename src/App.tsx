@@ -232,7 +232,19 @@ function Flow({ question: q, progress, update, next }: { question: Question; pro
           </ul>
         </>
       ) : <p className="note">Esta questão ainda não tem explicação. O gabarito acima é o oficial do Inep.</p>}
-      <AskAI label="Explicar a resposta com IA" prompt="Explique de forma simples por que o gabarito é essa alternativa e o que eu devo observar para acertar." context={`Questão ${q.number} do ENEM ${q.year}\nTexto da questão: ${q.text ?? ''}\nGabarito oficial: ${q.answer}\nO aluno marcou: ${saved?.choice}\nExplicação: ${q.resposta ?? ''}`} />
+      <AskAI
+        label="Explicar a resposta com IA"
+        prompt="Explique de forma simples por que o gabarito é essa alternativa e o que eu devo observar para acertar."
+        images={[q.context, q.image].filter((s): s is string => !!s)}
+        context={[
+          `Questão ${q.number} do ENEM ${q.year} (a imagem é a questão).`,
+          `Assunto: ${q.assunto}`,
+          `Gabarito oficial: ${q.answer} — ${q.alternativas?.[q.answer] ?? ''}`,
+          saved && saved.choice !== q.answer ? `O aluno marcou ${saved.choice} — ${q.alternativas?.[saved.choice] ?? ''}` : 'O aluno acertou.',
+          `Como resolver: ${(q.passos ?? []).join(' ')}`,
+          `Por que é ${q.answer}: ${q.resposta ?? ''}`,
+        ].join('\n')}
+      />
       <details><summary>Ver a questão de novo</summary>{q.context && <Zoomable src={q.context} alt="Texto compartilhado" />}<Zoomable src={q.image} alt={`Questão ${q.number}`} /></details>
       <button className="primary" onClick={() => next(!right)}>{right ? 'Próxima questão' : 'Outra do mesmo assunto'}</button>
       <button className="ghost" onClick={() => update((p) => ({ ...p, reported: reported ? p.reported.filter((id) => id !== q.id) : [...p.reported, q.id] }))}>{reported ? 'Erro reportado ✓' : 'Reportar erro nesta explicação'}</button>

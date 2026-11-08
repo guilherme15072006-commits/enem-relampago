@@ -13,42 +13,84 @@ Se não tiver certeza de um fato, diga isso claramente.`;
 
 interface Message { role: 'user' | 'assistant'; content: string }
 
-// Servidor com o token do dono guardado em segredo. Sem ele no ar, o app usa o token salvo no aparelho.
-const SERVER = 'https://ymuziccgrqjbugsdwgjo.supabase.co/functions/v1/enem_ai';
-const CLIENT_KEY = 'enem-relampago.client-id';
-class ServerUnavailable extends Error {}
+// Mesma IA dos agentes revisores da Vaquejada: Space gratuito do Hugging Face com Qwen3-VL (lê imagem e texto).
+// Funciona sem token, com pouca cota por aparelho; com o token salvo, a cota passa a ser a da conta.
+const SPACE = 'https://prithivmlmods-qwen3-vl-hf-demo.hf.space/gradio_api/call/run_understanding';
+class SpaceUnavailable extends Error {}
 
-function clientId() {
-  try {
-    let id = localStorage.getItem(CLIENT_KEY);
-    if (!id) { id = crypto.randomUUID(); localStorage.setItem(CLIENT_KEY, id); }
-    return id;
-  } catch {
-    return 'sem-armazenamento';
+/** Junta as imagens da questão numa só (o Space aceita uma imagem por pergunta). */
+async function questionImage(srcs: string[]) {
+  const canvas = document.createElement('canvas');
+  const draw = canvas.getContext('2d');
+  if (!draw) return '';
+  const imgs = await Promise.all(srcs.map(async (src) => {
+    const img = new Image();
+    img.src = src;
+    await img.decode();
+    return img;
+  })).catch(() => []);
+  if (!imgs.length) {
+    // Dúvida sem questão: o Space exige uma imagem, então vai um quadro branco pequeno.
+    canvas.width = canvas.height = 32;
+  } else {
+    const width = Math.min(900, Math.max(...imgs.map((i) => i.naturalWidth)));
+    const heights = imgs.map((i) => Math.round(i.naturalHeight * width / i.naturalWidth));
+    canvas.width = width;
+    canvas.height = Math.min(2400, heights.reduce((a, b) => a + b, 0));
+    let y = 0;
+    draw.fillStyle = '#fff';
+    draw.fillRect(0, 0, canvas.width, canvas.height);
+    imgs.forEach((img, k) => { draw.drawImage(img, 0, y, width, heights[k]); y += heights[k]; });
   }
+  if (!imgs.length) { draw.fillStyle = '#fff'; draw.fillRect(0, 0, 32, 32); }
+  return canvas.toDataURL('image/jpeg', .8).split(',')[1];
 }
 
-async function askServer(context: string, history: Message[]) {
+function spacePrompt(context: string, history: Message[], withImage: boolean) {
+  const talk = history.slice(-6).map((m) => `${m.role === 'user' ? 'Aluno' : 'Tutor'}: ${m.content}`).join('\n');
+  return `${SYSTEM}
+Use só o que está ${withImage ? 'na imagem da questão e ' : ''}no contexto abaixo e fatos que você tem certeza; não invente trechos.
+${withImage ? '' : 'Ignore a imagem: ela está em branco.\n'}
+Contexto:
+${context || 'Dúvida geral sobre o ENEM.'}
+
+Conversa:
+${talk}
+Tutor:`;
+}
+
+async function askSpace(context: string, history: Message[], images: string[], token?: string) {
+  const image = await questionImage(images);
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) headers.Authorization = `Bearer ${token}`;
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 75000);
-  let response: Response;
+  const timer = setTimeout(() => controller.abort(), 90000);
   try {
-    response = await fetch(SERVER, {
+    const start = await fetch(SPACE, {
       method: 'POST',
       signal: controller.signal,
-      headers: { 'Content-Type': 'application/json', 'x-client-id': clientId() },
-      body: JSON.stringify({ context: context.slice(0, 8000), messages: history.slice(-6).map((m) => ({ role: m.role, content: m.content.slice(0, 2000) })) }),
+      headers,
+      body: JSON.stringify({ data: ['Query', spacePrompt(context, history, images.length > 0), image, 450, 45] }),
     });
-  } catch {
-    throw new ServerUnavailable();
+    if (!start.ok) throw new SpaceUnavailable();
+    const { event_id: id } = await start.json();
+    const stream = await fetch(`${SPACE}/${id}`, { signal: controller.signal, headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    const raw = await stream.text();
+    const blocks = raw.split('\n\n').filter((b) => b.includes('data: '));
+    const last = blocks[blocks.length - 1];
+    if (!last || /event: error/.test(last)) throw new SpaceUnavailable();
+    const payload = JSON.parse(last.slice(last.indexOf('data: ') + 6));
+    const result = typeof payload[0] === 'string' && payload[0].startsWith('{') ? JSON.parse(payload[0]) : { text: String(payload[0] ?? '') };
+    const text = String(result.text ?? '').trim();
+    // Sem cota, fila cheia ou erro do Space: tenta o outro caminho.
+    if (!text || result.status === 'error' || text.startsWith('[ERROR]')) throw new SpaceUnavailable(text);
+    return text;
+  } catch (e) {
+    if (e instanceof SpaceUnavailable) throw e;
+    throw new SpaceUnavailable();
   } finally {
     clearTimeout(timer);
   }
-  const data = await response.json().catch(() => ({}));
-  if (response.ok && data.text) return { text: data.text as string, reserve: false };
-  // Função não publicada ou sem token configurado: cai para o token do aparelho.
-  if (response.status === 404 || response.status === 503 || (response.status >= 500 && !data.error)) throw new ServerUnavailable();
-  throw new Error(data.error || `A IA não respondeu (erro ${response.status}). Tente de novo.`);
 }
 
 const readTokens = () => TOKEN_KEYS.map((key) => {
@@ -117,9 +159,11 @@ interface AskProps {
   /** Pergunta enviada sozinha ao tocar no botão. Sem ela, abre direto para digitar. */
   prompt?: string;
   label?: string;
+  /** Recortes da questão que a IA de visão deve ler junto com o texto. */
+  images?: string[];
 }
 
-export function AskAI({ context, prompt, label = 'Explicar com IA' }: AskProps) {
+export function AskAI({ context, prompt, label = 'Explicar com IA', images = [] }: AskProps) {
   const [saved, setSaved] = useState(readTokens);
   const [drafts, setDrafts] = useState(['', '']);
   const [reserve, setReserve] = useState(false);
@@ -131,6 +175,7 @@ export function AskAI({ context, prompt, label = 'Explicar com IA' }: AskProps) 
   const [error, setError] = useState('');
 
   const [needToken, setNeedToken] = useState(false);
+  const [pending, setPending] = useState('');
 
   const run = async (text: string, keys = tokens) => {
     const history: Message[] = [...messages, { role: 'user', content: text }];
@@ -140,15 +185,18 @@ export function AskAI({ context, prompt, label = 'Explicar com IA' }: AskProps) 
     try {
       let answer;
       try {
-        answer = await askServer(context, history);
+        // 1º: o Space da Vaquejada (com o token do aparelho, se houver, para ter mais cota).
+        answer = { text: await askSpace(context, history, images, keys[0]), reserve: false };
       } catch (e) {
-        if (!(e instanceof ServerUnavailable)) throw e;
+        if (!(e instanceof SpaceUnavailable)) throw e;
         if (!keys.length) {
-          // Sem servidor e sem token no aparelho: pede o token e refaz a mesma pergunta depois.
+          // Acabou a cota grátis deste aparelho: pede o token e refaz a mesma pergunta depois.
           setMessages(messages);
+          setPending(text);
           setNeedToken(true);
           return;
         }
+        // 2º: o roteador do Hugging Face com o token (principal e reserva).
         answer = await ask(keys, context, history);
       }
       setReserve(answer.reserve);
@@ -173,8 +221,10 @@ export function AskAI({ context, prompt, label = 'Explicar com IA' }: AskProps) 
     setSaved(values);
     setDrafts(['', '']);
     setNeedToken(false);
-    // Salvou o token: já busca a explicação que foi pedida.
-    if (prompt && !messages.length) run(prompt, values.filter(Boolean));
+    // Salvou o token: refaz a pergunta que ficou esperando.
+    const retry = pending || (prompt && !messages.length ? prompt : '');
+    setPending('');
+    if (retry) run(retry, values.filter(Boolean));
   };
   const forget = () => { writeTokens(['', '']); setSaved(['', '']); setMessages([]); setError(''); setReserve(false); };
   const send = (event: FormEvent) => {
@@ -191,7 +241,7 @@ export function AskAI({ context, prompt, label = 'Explicar com IA' }: AskProps) 
     <div className="ai">
       {needToken && tokens.length === 0 ? (
         <form onSubmit={saveToken}>
-          <p className="muted small">Para a IA responder, crie um token no Hugging Face com a permissão “Make calls to Inference Providers” e cole aqui. É só uma vez: ele fica salvo neste aparelho.</p>
+          <p className="muted small">A cota grátis da IA neste aparelho acabou por agora. Para continuar sem limite, crie um token no Hugging Face com a permissão “Make calls to Inference Providers” e cole aqui. É só uma vez: ele fica salvo neste aparelho. Ou espere algumas horas e tente de novo.</p>
           <a href="https://huggingface.co/settings/tokens" target="_blank" rel="noreferrer">Abrir página de tokens</a>
           {TOKEN_LABELS.map((text, i) => (
             <label key={text}>
