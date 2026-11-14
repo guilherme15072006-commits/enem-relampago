@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AskAI } from './ai';
 import {
-  AREA_LABEL, Answer, Confidence, LETTERS, Letter, Progress, QUESTIONS, Question,
+  AREA_LABEL, Answer, Confidence, Day, LETTERS, Letter, Progress, QUESTIONS, Question,
   priorities, topics, useProgress, visibleFor,
 } from './store';
 
@@ -9,22 +9,32 @@ type Tab = 'plano' | 'treino' | 'cartas' | 'duvidas';
 type Update = (fn: (p: Progress) => Progress) => void;
 interface TrainTarget { assunto?: string; from?: number; to?: number; label?: string }
 
-const PARTS: TrainTarget[] = [
-  { label: 'Prova inteira', from: 1, to: 90 },
-  { label: 'Língua estrangeira', from: 1, to: 5 },
-  { label: 'Linguagens', from: 6, to: 45 },
-  { label: 'Humanas', from: 46, to: 90 },
-  { label: 'Questões 1 a 15', from: 1, to: 15 },
-  { label: 'Questões 16 a 30', from: 16, to: 30 },
-  { label: 'Questões 31 a 45', from: 31, to: 45 },
-  { label: 'Questões 46 a 60', from: 46, to: 60 },
-  { label: 'Questões 61 a 75', from: 61, to: 75 },
-  { label: 'Questões 76 a 90', from: 76, to: 90 },
-];
-const inTarget = (t: TrainTarget) => (q: Question) => q.explained && (!t.assunto || q.assunto === t.assunto)
+const blocks = (first: number) => Array.from({ length: 6 }, (_, i) => ({ label: `Questões ${first + i * 15} a ${first + i * 15 + 14}`, from: first + i * 15, to: first + i * 15 + 14 }));
+const DAYS: Record<Day, { first: number; last: number; label: string; areas: string; date: Date; when: string; parts: TrainTarget[] }> = {
+  1: {
+    first: 1, last: 90, label: '1º dia', areas: 'Linguagens e Humanas',
+    date: new Date('2026-11-08T13:30:00-03:00'), when: 'Domingo, 8 de novembro, às 13h30. Portões fecham às 13h.',
+    parts: [
+      { label: 'Prova inteira', from: 1, to: 90 },
+      { label: 'Língua estrangeira', from: 1, to: 5 },
+      { label: 'Linguagens', from: 6, to: 45 },
+      { label: 'Humanas', from: 46, to: 90 },
+      ...blocks(1),
+    ],
+  },
+  2: {
+    first: 91, last: 180, label: '2º dia', areas: 'Natureza e Matemática',
+    date: new Date('2026-11-15T13:30:00-03:00'), when: 'Domingo, 15 de novembro, às 13h30. Portões fecham às 13h.',
+    parts: [
+      { label: 'Prova inteira', from: 91, to: 180 },
+      { label: 'Ciências da Natureza', from: 91, to: 135 },
+      { label: 'Matemática', from: 136, to: 180 },
+      ...blocks(91),
+    ],
+  },
+};
+const inTarget = (t: TrainTarget) => (q: Question) => (!t.assunto || q.assunto === t.assunto)
   && (t.from === undefined || q.number >= t.from) && (t.to === undefined || q.number <= t.to);
-
-const EXAM = new Date('2026-11-08T13:30:00-03:00');
 const CONFIDENCE: [Confidence, string][] = [['sei', 'Sei'], ['duvida', 'Dúvida'], ['chute', 'Chute']];
 
 export function App() {
@@ -48,20 +58,29 @@ export function App() {
 }
 
 function Plan({ progress, update, train, open }: { progress: Progress; update: Update; train: (t?: TrainTarget | null) => void; open: (tab: Tab) => void }) {
-  const left = EXAM.getTime() - Date.now();
+  const day = DAYS[progress.day];
+  const left = day.date.getTime() - Date.now();
   const days = Math.floor(left / 86400000);
   const hours = Math.floor((left % 86400000) / 3600000);
-  const reviewed = QUESTIONS.filter((q) => progress.answers[q.id]?.reviewed);
+  const ofDay = QUESTIONS.filter(visibleFor(progress));
+  const reviewed = ofDay.filter((q) => progress.answers[q.id]?.reviewed);
   const right = reviewed.filter((q) => progress.answers[q.id].choice === q.answer);
   const lucky = right.filter((q) => progress.answers[q.id].confidence === 'chute');
   const list = priorities(progress).slice(0, 6);
-  const fallback = topics().slice(0, 6).map((t) => t.assunto);
+  const fallback = topics(progress.day).slice(0, 6).map((t) => t.assunto);
+  const explained = ofDay.filter((q) => q.explained).length;
 
   return (
     <section>
-      <p className="eyebrow">ENEM 2026 · 1º dia</p>
-      <h1>{left > 0 ? `Faltam ${days}d ${hours}h` : 'Boa prova!'}</h1>
-      <p className="muted">Domingo, 8 de novembro, às 13h30. Portões fecham às 13h.</p>
+      <div className="segment" role="group" aria-label="Dia da prova">
+        {([1, 2] as const).map((d) => (
+          <button key={d} className={progress.day === d ? 'on' : ''} aria-pressed={progress.day === d} onClick={() => update((p) => ({ ...p, day: d }))}>{DAYS[d].label} · {DAYS[d].areas}</button>
+        ))}
+      </div>
+      <p className="eyebrow">ENEM 2026 · {day.label}</p>
+      <h1>{left > 0 ? `Faltam ${days}d ${hours}h` : left > -6 * 3600000 ? 'Boa prova!' : 'Prova feita'}</h1>
+      <p className="muted">{day.when}</p>
+      {explained < ofDay.length && <p className="note small">{explained} de {ofDay.length} questões já têm explicação. As outras mostram o gabarito oficial enquanto as explicações chegam.</p>}
       <button className="primary" onClick={() => train()}>Fazer questões</button>
       <div className="pair">
         <button className="ghost" onClick={() => open('cartas')}>Cartas de assunto</button>
@@ -82,33 +101,38 @@ function Plan({ progress, update, train, open }: { progress: Progress; update: U
         ))}
       </ul>
 
-      <h2>Língua estrangeira</h2>
-      <div className="segment">
-        {(['en', 'es'] as const).map((lang) => (
-          <button key={lang} className={progress.lang === lang ? 'on' : ''} onClick={() => update((p) => ({ ...p, lang }))}>{lang === 'en' ? 'Inglês' : 'Espanhol'}</button>
-        ))}
-      </div>
+      {progress.day === 1 && (
+        <>
+          <h2>Língua estrangeira</h2>
+          <div className="segment">
+            {(['en', 'es'] as const).map((lang) => (
+              <button key={lang} className={progress.lang === lang ? 'on' : ''} onClick={() => update((p) => ({ ...p, lang }))}>{lang === 'en' ? 'Inglês' : 'Espanhol'}</button>
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 }
 
 function Picker({ progress, choose }: { progress: Progress; choose: (t: TrainTarget) => void }) {
-  const [from, setFrom] = useState('1');
-  const [to, setTo] = useState('90');
-  const visible = QUESTIONS.filter(visibleFor(progress.lang));
+  const day = DAYS[progress.day];
+  const [from, setFrom] = useState(String(day.first));
+  const [to, setTo] = useState(String(day.last));
+  const visible = QUESTIONS.filter(visibleFor(progress));
   const count = (t: TrainTarget) => {
     const list = visible.filter(inTarget(t));
     return `${list.filter((q) => progress.answers[q.id]?.reviewed).length} de ${list.length}`;
   };
-  const start = Math.min(90, Math.max(1, Number(from) || 1));
-  const end = Math.min(90, Math.max(start, Number(to) || start));
+  const start = Math.min(day.last, Math.max(day.first, Number(from) || day.first));
+  const end = Math.min(day.last, Math.max(start, Number(to) || start));
 
   return (
     <section>
-      <p className="eyebrow">Treino · ENEM 2025 · 1º dia</p>
+      <p className="eyebrow">Treino · ENEM 2025 · {day.label} · {day.areas}</p>
       <h1>Qual parte você quer fazer?</h1>
       <ul className="list">
-        {PARTS.map((part) => (
+        {day.parts.map((part) => (
           <li key={part.label}><button onClick={() => choose(part)}><span>{part.label}</span><small>{count(part)}</small></button></li>
         ))}
       </ul>
@@ -120,7 +144,7 @@ function Picker({ progress, choose }: { progress: Progress; choose: (t: TrainTar
       </div>
       <h2>Por assunto</h2>
       <ul className="list">
-        {topics().map(({ assunto }) => (
+        {topics(progress.day).map(({ assunto }) => (
           <li key={assunto}><button onClick={() => choose({ assunto })}><span>{assunto}</span><small>{count({ assunto })}</small></button></li>
         ))}
       </ul>
@@ -129,7 +153,7 @@ function Picker({ progress, choose }: { progress: Progress; choose: (t: TrainTar
 }
 
 function Train({ target, progress, update, clear }: { target: TrainTarget; progress: Progress; update: Update; clear: () => void }) {
-  const pool = useMemo(() => QUESTIONS.filter(visibleFor(progress.lang)).filter(inTarget(target)), [progress.lang, target]);
+  const pool = useMemo(() => QUESTIONS.filter(visibleFor(progress)).filter(inTarget(target)), [progress.lang, progress.day, target]);
   const pick = (assunto?: string, skip?: string) => {
     const open = pool.filter((q) => !progress.answers[q.id]?.reviewed && q.id !== skip);
     return open.find((q) => q.assunto === assunto) ?? open[0] ?? null;
@@ -202,7 +226,7 @@ function Flow({ question: q, progress, update, next }: { question: Question; pro
         </div>
         <p className="muted small">Toque na alternativa oficial para ver o resultado.</p>
         <div className="letters">
-          {LETTERS.map((l) => <button key={l} aria-label={`Responder ${l}: ${q.alternativas?.[l] ?? ''}`} onClick={() => answerWith(l)}><b>{l}</b><span>{q.alternativas?.[l]}</span></button>)}
+          {LETTERS.map((l) => <button key={l} aria-label={`Responder ${l}: ${q.alternativas?.[l] ?? ''}`} onClick={() => answerWith(l)}><b>{l}</b><span>{q.alternativas?.[l] ?? 'Alternativa na imagem da questão'}</span></button>)}
         </div>
       </section>
     );
@@ -263,7 +287,7 @@ function Zoomable({ src, alt }: { src: string; alt: string }) {
 }
 
 function Cards({ progress, update, train }: { progress: Progress; update: Update; train: (t?: TrainTarget | null) => void }) {
-  const all = useMemo(topics, []);
+  const all = useMemo(() => topics(progress.day), [progress.day]);
   const pending = all.filter((t) => !progress.cards[t.assunto]);
   const card = pending[0];
   const set = (assunto: string, state: 'sei' | 'revisar') => update((p) => ({ ...p, cards: { ...p.cards, [assunto]: state } }));

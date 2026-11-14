@@ -17,7 +17,7 @@ const Raw = z.object({
 });
 const Explain = z.object({
   id: z.string(), assunto: z.string().min(3), conteudo: z.string().min(20),
-  passos: z.array(z.string().min(5)).min(2).max(4), resposta: z.string().min(10),
+  passos: z.array(z.string().min(5)).min(2).max(6), resposta: z.string().min(10),
   pegadinhas: z.record(Letter, z.string().min(5)),
 });
 
@@ -57,11 +57,13 @@ for (const d of readJsonDir(join(root, 'data', 'explain-v2'))) {
 }
 
 const errors = [];
+const annulled = [];
 const pending = [];
 const questions = [];
 for (const q of raw) {
   if (!Letter.safeParse(q.answer).success) {
-    errors.push(`${q.id}: sem gabarito válido (${q.answer}); ficou de fora`);
+    // Questão anulada pelo Inep (gabarito "X" ou vazio): fica de fora sem travar o build.
+    annulled.push(q.id);
     continue;
   }
   if (!existsSync(join(root, 'public', q.image))) errors.push(`${q.id}: recorte não encontrado`);
@@ -69,7 +71,8 @@ for (const q of raw) {
   const e = explanations.get(q.id);
   if (!e) {
     pending.push(q.id);
-    questions.push({ ...q, context: q.context ?? null, explained: false });
+    // Sem explicação ainda: entra com o gabarito oficial (o app avisa que falta a explicação).
+    questions.push({ ...q, context: q.context ?? null, explained: false, alternativas: alternatives(q.text) });
     continue;
   }
   const wrong = Letter.options.filter((l) => l !== q.answer);
@@ -77,19 +80,20 @@ for (const q of raw) {
   if (missing.length) errors.push(`${q.id}: falta pegadinha em ${missing.join(', ')}`);
   if (e.pegadinhas[q.answer]) errors.push(`${q.id}: há pegadinha na alternativa correta ${q.answer}`);
   const { id, ...text } = e;
+  // Alternativas em imagem (gráficos, figuras) não viram texto: o aluno lê no recorte da prova.
   const alternativas = alternatives(q.text);
-  if (!alternativas) errors.push(`${q.id}: não consegui ler as 5 alternativas oficiais`);
   questions.push({ ...q, context: q.context ?? null, explained: true, alternativas, ...text });
 }
 const orphan = [...explanations.keys()].filter((id) => !raw.some((q) => q.id === id));
 if (orphan.length) errors.push(`explicações sem questão: ${orphan.join(', ')}`);
 
 mkdirSync(join(root, 'src', 'data'), { recursive: true });
-// O app só usa questões explicadas; as pendentes ficam fora do pacote até serem revisadas.
-writeFileSync(join(root, 'src', 'data', 'questions.json'), JSON.stringify(questions.filter((q) => q.explained)));
+// Entram as provas de 2025 inteiras (as sem explicação mostram só o gabarito oficial) e, de outros anos,
+// só as questões já explicadas, para um ano recém-importado não aparecer cru.
+writeFileSync(join(root, 'src', 'data', 'questions.json'), JSON.stringify(questions.filter((q) => q.explained || q.year === 2025)));
 writeFileSync(join(root, 'data', 'pendentes.json'), JSON.stringify(pending, null, 1));
 
-console.log(`${questions.length} questões | ${questions.length - pending.length} explicadas (${deepened} aprofundadas) | ${pending.length} pendentes`);
+console.log(`${questions.length} questões | ${questions.length - pending.length} explicadas (${deepened} aprofundadas) | ${pending.length} pendentes | anuladas: ${annulled.join(', ') || 'nenhuma'}`);
 if (errors.length) {
   console.error(errors.join('\n'));
   process.exit(1);

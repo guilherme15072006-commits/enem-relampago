@@ -16,7 +16,7 @@ const stem = (w) => w.slice(0, 5);
 
 const problems = [];
 const report = [];
-for (const q of questions) {
+for (const q of questions.filter((x) => x.explained)) {
   const correct = q.alternativas?.[q.answer] ?? '';
   const where = `${q.id} [${q.answer}]`;
 
