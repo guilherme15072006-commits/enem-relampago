@@ -8,7 +8,9 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const questions = JSON.parse(readFileSync(join(root, 'src', 'data', 'questions.json'), 'utf8'));
 
 const STOP = new Set(['para', 'como', 'pelo', 'pela', 'pelos', 'pelas', 'entre', 'sobre', 'desse', 'dessa', 'deste', 'desta', 'esse', 'essa', 'este', 'esta', 'seus', 'suas', 'mais', 'muito', 'quando', 'também', 'ainda', 'outro', 'outra', 'outros', 'outras', 'sendo', 'pois', 'diante', 'acerca', 'meio', 'forma', 'formas', 'uma', 'umas']);
-const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+// Índices de fórmula (H₂O) contam como dígitos comuns (H2O), como no texto oficial da prova.
+const norm = (s) => s.replace(/[₀-₉]/g, (c) => String(c.charCodeAt(0) - 0x2080)).replace(/[⁰¹²³⁴-⁹]/g, (c) => String('⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)))
+  .toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const words = (s) => norm(s).match(/[a-z0-9]+/g) ?? [];
 const keyWords = (s) => [...new Set(words(s).filter((w) => w.length > 4 && !STOP.has(norm(w))))];
 // Radical simples: compara as 5 primeiras letras (pega plural, gênero e derivações próximas).
