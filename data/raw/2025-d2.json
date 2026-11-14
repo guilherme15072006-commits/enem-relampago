@@ -1489,7 +1489,7 @@
   "language": null,
   "area": "matematica",
   "image": "questoes/2025-165.webp",
-  "text": "Questão 165\t\nEm um estudo clínico, 55 mulheres foram distribuídas, ale\nmedicação, será escolhido um grupo no qual a maioria das m\ntomarão placebo ou medicações já existentes no mercado. O q\nàs idades das mulheres desses grupos.\nGrupos\nMenor idade\nMaior idade\nMé\n1\n2\n2\n3\n4\n2\n5\n20\n35\nMesmo com o quadro incompleto, foi possível selecionar u\nquadro, foi identificado um grupo que, certamente, atendia ao\nO grupo escolhido foi o\nA\t1.\nB\t2.\nC\t3.\nD\t4.\nE\t5.",
+  "text": "Questão 165 Em um estudo clínico, 55 mulheres foram distribuídas, aleatoriamente, em 5 grupos de 11 pessoas. Para testar uma nova medicação, será escolhido um grupo no qual a maioria das mulheres tenham idades entre 20 e 30 anos. Os demais grupos tomarão placebo ou medicações já existentes no mercado. O quadro, parcialmente preenchido, informa alguns dados relativos às idades das mulheres desses grupos. Grupo 1: média 25, desvio padrão 10. Grupo 2: mediana 25, desvio padrão 9. Grupo 3: moda 25. Grupo 4: média 25, desvio padrão 1. Grupo 5: menor idade 20, maior idade 35. Mesmo com o quadro incompleto, foi possível selecionar um desses grupos porque, apenas com os dados apresentados no quadro, foi identificado um grupo que, certamente, atendia ao critério de escolha. O grupo escolhido foi o\nA 1.\nB 2.\nC 3.\nD 4.\nE 5.",
   "segments": 1,
   "pages": [
    26
@@ -1509,7 +1509,7 @@
   "language": null,
   "area": "matematica",
   "image": "questoes/2025-166.webp",
-  "text": "Questão 166\t\nPace é um termo usado por um corredor para denominar o\nem segundo, que esse corredor leva para percorrer 1 km.\nO esquema apresenta o tempo, em segundo, que um corred\ntrechos de 1 km, em uma corrida de 5 km, e o tempo gasto par\nO melhor pace que esse corredor alcançou em corridas de\nPara que consiga repetir nessa corrida seu melhor pace em corri\nmenor do que o que ele gastou para percorrer o 4º trecho?\nA\t1\nB\t2\nC\t8\nD\t9\nE\t15\n\neatoriamente, em 5 grupos de 11 pessoas. Para testar uma nova \nmulheres tenham idades entre 20 e 30 anos. Os demais grupos \nuadro, parcialmente preenchido, informa alguns dados relativos \nédia\nMediana\nModa\nDesvio padrão\n25\n10\n25\n9\n25\n25\n1\nm desses grupos porque, apenas com os dados apresentados no \no critério de escolha.\no seu ritmo médio em uma corrida. Representa o tempo médio, \ndor levou para cruzar as marcas que definem os quatro primeiros \nra percorrer cada trecho de 1 km.\n 5 km foi 281 s/km.\ndas de 5 km, seu tempo, no 5º trecho, deve ser quantos segundos",
+  "text": "Questão 166\t\nPace é um termo usado por um corredor para denominar o seu ritmo médio em uma corrida. Representa o tempo médio, \nem segundo, que esse corredor leva para percorrer 1 km.\nO esquema apresenta o tempo, em segundo, que um corredor levou para cruzar as marcas que definem os quatro primeiros \ntrechos de 1 km, em uma corrida de 5 km, e o tempo gasto para percorrer cada trecho de 1 km.\nO melhor pace que esse corredor alcançou em corridas de 5 km foi 281 s/km.\nPara que consiga repetir nessa corrida seu melhor pace em corridas de 5 km, seu tempo, no 5º trecho, deve ser quantos segundos \nmenor do que o que ele gastou para percorrer o 4º trecho?\nA 1\nB 2\nC 8\nD 9\nE 15\n",
   "segments": 2,
   "pages": [
    26,
@@ -1530,7 +1530,7 @@
   "language": null,
   "area": "matematica",
   "image": "questoes/2025-167.webp",
-  "text": "Questão 167\t\nUma pessoa tem um carro bicombustível, que funciona a gá\nmedido em km/m³, no caso do gás, ou medido em km/L, no cas\nem km/h, em que o carro trafega. Essa relação está em conform\nDurante um feriado, essa pessoa realizou uma viagem de 2\nassuma que em todo o trajeto se manteve uma velocidade const\nfoi utilizado apenas GNV e, na outra metade, apenas gasolina. O \ncorrespondeu, respectivamente, a R$ 2,00 e a R$ 3,00.\nQual foi a diferença, em real, entre os gastos totais com gasolina \nA\t4\nB\t8\nC\t14\nD\t21\nE\t30",
+  "text": "Questão 167\t\nUma pessoa tem um carro bicombustível, que funciona a gás natural veicular (GNV) e a gasolina. O rendimento do carro, \nmedido em km/m³, no caso do gás, ou medido em km/L, no caso da gasolina, depende, entre outros fatores, da velocidade, \nem km/h, em que o carro trafega. Essa relação está em conformidade com estes gráficos.\nDurante um feriado, essa pessoa realizou uma viagem de 240 km. Para obter uma estimativa de gasto de combustível, \nassuma que em todo o trajeto se manteve uma velocidade constante de 60 km/h. Considere que, durante metade do caminho, \nfoi utilizado apenas GNV e, na outra metade, apenas gasolina. O que foi pago pelo metro cúbico de GNV e pelo litro de gasolina \ncorrespondeu, respectivamente, a R$ 2,00 e a R$ 3,00.\nQual foi a diferença, em real, entre os gastos totais com gasolina e com GNV?\nA 4\nB 8\nC 14\nD 21\nE 30\n",
   "segments": 1,
   "pages": [
    27
@@ -1550,7 +1550,7 @@
   "language": null,
   "area": "matematica",
   "image": "questoes/2025-168.webp",
-  "text": "Questão 168\t\nEm um país, a primeira etapa para obtenção da carteira de m\n•\tpacote com 20 aulas teóricas;\n•\tpacote com 10 aulas práticas;\n•\taluguel do veículo para realização das aulas práticas.\nUma pessoa que pretende obter a carteira de motorista pes\nteórica e de cada aula prática em três autoescolas. O quadro apr\nAutoescola\nValor de cada aula teórica (R$)\nValor \nI\n10\nII\n30\nIII\n20\nEla contratará os três produtos numa mesma autoescola de mo\nA autoescola que será contratada é a\nA\tI, com o custo total de R$ 1 400,00.\nB\tII, com o custo total de R$ 280,00.\nC\tII, com o custo total de R$ 1 300,00.\nD\tIII, com o custo total de R$ 460,00.\nE\tIII, com o custo total de R$ 1 200,00.\n\nás natural veicular (GNV) e a gasolina. O rendimento do carro, \nso da gasolina, depende, entre outros fatores, da velocidade, \nmidade com estes gráficos.\n240 km. Para obter uma estimativa de gasto de combustível, \nante de 60 km/h. Considere que, durante metade do caminho, \nque foi pago pelo metro cúbico de GNV e pelo litro de gasolina \ne com GNV?\nmotorista é a contratação de três produtos:\nsquisou o valor do aluguel do veículo e os valores de cada aula \nresenta esses valores.\nde cada aula prática (R$)\nAluguel do veículo (R$)\n80\n400\n50\n200\n40\n400\nodo que o custo total nessa primeira etapa seja o menor possível.",
+  "text": "Questão 168\t\nEm um país, a primeira etapa para obtenção da carteira de motorista é a contratação de três produtos:\n•\tpacote com 20 aulas teóricas;\n•\tpacote com 10 aulas práticas;\n•\taluguel do veículo para realização das aulas práticas.\nUma pessoa que pretende obter a carteira de motorista pesquisou o valor do aluguel do veículo e os valores de cada aula \nteórica e de cada aula prática em três autoescolas. O quadro apresenta esses valores.\nAutoescola\nValor de cada aula teórica (R$)\nValor de cada aula prática (R$)\nAluguel do veículo (R$)\nI\n10\n80\n400\nII\n30\n50\n200\nIII\n20\n40\n400\nEla contratará os três produtos numa mesma autoescola de modo que o custo total nessa primeira etapa seja o menor possível.\nA autoescola que será contratada é a\nA I, com o custo total de R$ 1 400,00.\nB II, com o custo total de R$ 280,00.\nC II, com o custo total de R$ 1 300,00.\nD III, com o custo total de R$ 460,00.\nE III, com o custo total de R$ 1 200,00.\n",
   "segments": 2,
   "pages": [
    27,
@@ -1571,7 +1571,7 @@
   "language": null,
   "area": "matematica",
   "image": "questoes/2025-169.webp",
-  "text": "Questão 169\t\nA produtividade de soja em uma área cultivada é a média\npor hectare. O quadro apresenta a área cultivada e a produtiv\ncom períodos de um ano, de 2011 a 2016.\nSafra\n11-\nÁrea cultivada (hectare)\n20\nProdutividade (sacas de 50 kg por hectare)\n40\nO gráfico de linhas que representa a produção de soja dessa pr\nA\t\nB\t\nC\t\n\n da quantidade de sacas de 50 quilogramas que são produzidas \nvidade de soja em certa propriedade, ao longo de cinco safras, \n-12\n12-13\n13-14\n14-15\n15-16\n00\n220\n250\n250\n200\n0\n30\n45\n45\n50\nopriedade, em tonelada, nessas cinco safras é\nD\t\nE",
+  "text": "Questão 169\t\nA produtividade de soja em uma área cultivada é a média da quantidade de sacas de 50 quilogramas que são produzidas \npor hectare. O quadro apresenta a área cultivada e a produtividade de soja em certa propriedade, ao longo de cinco safras, \ncom períodos de um ano, de 2011 a 2016.\nSafra\n11-12\n12-13\n13-14\n14-15\n15-16\nÁrea cultivada (hectare)\n200\n220\n250\n250\n200\nProdutividade (sacas de 50 kg por hectare)\n40\n30\n45\n45\n50\nO gráfico de linhas que representa a produção de soja dessa propriedade, em tonelada, nessas cinco safras é\nA \nB \nC \nD \nE \n",
   "segments": 2,
   "pages": [
    28,
